@@ -1,0 +1,43 @@
+# Fake news workflow
+#
+
+# Require Snakemake >= this version
+import os
+from pathlib import Path
+
+from snakemake.utils import min_version
+
+min_version("6.12.3")
+
+# print(f"Current directory: {Path.cwd()}")
+# print(f"Home directory: {Path.home()}")
+# path_wd = Path.cwd()
+# print(f"Parent of working directory: {path_wd.parent}")
+
+configfile: "../config/config.yaml"
+
+report: "report/workflow.rst"
+
+rule targets:
+    input:
+        "../results/processed_data/fake_news_tidy_data.rds",
+        "../results/processed_data/pol_dat.rds",
+        "../results/processed_data/covid_dat.rds",
+        "../results/models/td_ref_pol_fit.rds",
+        "../results/models/td_ref_pol_pp_check.pdf",
+        #
+        "../results/models/varsel_td_pol.rds",
+        #
+        "../results/models/td_plot_yhat_sub_tot.pdf",
+        "../results/models/td_yhat_tot_y.pdf",
+        "../results/models/td_yhat_subset_y.pdf",
+        #
+        "../results/models/td_plot_yhat_cv_y.pdf"
+
+
+include: "rules/common.smk"
+include: "rules/tidy_data.smk"
+include: "rules/split_data.smk"
+include: "rules/fit_ref_model.smk"
+include: "rules/varsel_ref_pol_td.smk"
+include: "rules/validation.smk"
